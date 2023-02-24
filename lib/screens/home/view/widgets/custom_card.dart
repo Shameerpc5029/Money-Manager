@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:money_manager/common/style/sizedbox.dart';
 
 class CustomCard extends StatelessWidget {
   final String title;
@@ -53,6 +53,54 @@ class CustomCard extends StatelessWidget {
             ],
           )
         ],
+      ),
+    );
+  }
+}
+
+class CustomCardSmall extends StatelessWidget {
+  final String text;
+  final IconData iconData;
+  final void Function() onTap;
+  const CustomCardSmall({
+    super.key,
+    required this.text,
+    required this.iconData,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+              offset: Offset(2, 2),
+              blurRadius: 8,
+              color: Color.fromRGBO(0, 0, 0, 0.16),
+            )
+          ],
+        ),
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            Icon(
+              iconData,
+            ),
+            KSizedBox().width10,
+            Text(
+              text,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontSize: 10),
+            )
+          ],
+        ),
       ),
     );
   }

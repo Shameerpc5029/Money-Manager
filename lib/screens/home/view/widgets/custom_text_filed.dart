@@ -7,15 +7,17 @@ class CustomTextFormField extends StatelessWidget {
     this.suffix,
     required this.prefixIcon,
     required this.textInputType,
+    required this.textEditingController,
   });
   final TextInputType textInputType;
   final IconData prefixIcon;
   final String labelText;
   final Widget? suffix;
-
+  final TextEditingController textEditingController;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: textEditingController,
       keyboardType: textInputType,
       decoration: InputDecoration(
         // suffixIcon: Icon(suffixIcon),
