@@ -1,16 +1,4 @@
-# money_manager
+# Money Manager
 
 A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Simulator Screen Shot - iPhone 14 Pro - 2023-02-24 at 16 32 56](https://user-images.githubusercontent.com/92718077/221570261-3e4fa7d1-40e2-41e5-8e0c-810e71f4f8e0.png)
