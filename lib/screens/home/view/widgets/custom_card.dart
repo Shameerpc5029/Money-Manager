@@ -62,11 +62,15 @@ class CustomCardSmall extends StatelessWidget {
   final String text;
   final IconData iconData;
   final void Function() onTap;
+  final Color backgroundColor;
+  final Color foregroundColor;
   const CustomCardSmall({
     super.key,
     required this.text,
     required this.iconData,
     required this.onTap,
+    required this.backgroundColor,
+    required this.foregroundColor,
   });
 
   @override
@@ -75,7 +79,7 @@ class CustomCardSmall extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
             BoxShadow(
@@ -90,6 +94,7 @@ class CustomCardSmall extends StatelessWidget {
           children: [
             Icon(
               iconData,
+              color: foregroundColor,
             ),
             KSizedBox().width10,
             Text(
@@ -97,7 +102,7 @@ class CustomCardSmall extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
-                  .copyWith(fontSize: 10),
+                  .copyWith(fontSize: 10, color: foregroundColor),
             )
           ],
         ),

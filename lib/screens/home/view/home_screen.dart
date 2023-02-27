@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:money_manager/common/style/colors.dart';
 import 'package:money_manager/common/style/sizedbox.dart';
 
@@ -14,10 +15,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<HomeController>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      provider.getAllData();
-    });
     return Scaffold(
       appBar: AppBar(
         leading: const Icon(
@@ -136,39 +133,94 @@ class HomeScreen extends StatelessWidget {
                 Card(
                   elevation: 3,
                   child: CupertinoSearchTextField(
+                    autofocus: false,
                     borderRadius: BorderRadius.circular(10),
                     backgroundColor: Colors.white,
                   ),
                 ),
-                ListView.builder(
-                  physics: const ScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: home.dataFound.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      onLongPress: () {
-                        home.deleteData(
-                            home.dataFound[index].id.toString(), context);
-                      },
-                      onTap: () {},
-                      leading: CircleAvatar(
-                        child:
-                            Text(home.dataFound[index].note[0].toUpperCase()),
-                      ),
-                      title: Text(home.dataFound[index].note),
-                      subtitle: Text(
-                        home.dataFound[index].date,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      trailing: Text(
-                        "₹${home.dataFound[index].amount}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(color: Colors.red),
-                      ),
-                    );
-                  },
+                SlidableAutoCloseBehavior(
+                  closeWhenOpened: true,
+                  child: ListView.builder(
+                    physics: const ScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: home.dataFound.length,
+                    itemBuilder: (context, index) {
+                      return Slidable(
+                        useTextDirection: true,
+                        endActionPane: ActionPane(
+                          motion: const BehindMotion(),
+                          children: [
+                            SlidableAction(
+                              backgroundColor: Colors.green,
+                              icon: Icons.edit,
+                              label: 'Edit',
+                              onPressed: (context) {},
+                            ),
+                            SlidableAction(
+                              backgroundColor: Colors.red,
+                              icon: Icons.delete,
+                              label: 'Remove',
+                              onPressed: (context) {
+                                showCupertinoModalPopup(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Confirm'),
+                                      content: const Text(
+                                          'Are you sure to delete this?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Close'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            home.deleteData(
+                                                home.dataFound[index].id
+                                                    .toString(),
+                                                context,
+                                                home.dataFound[index].note);
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Delete'),
+                                        )
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          onTap: () {},
+                          leading: CircleAvatar(
+                            child: Text(
+                              home.dataFound[index].note[0].toUpperCase(),
+                            ),
+                          ),
+                          title: Text(home.dataFound[index].note),
+                          subtitle: Text(
+                            home.dataFound[index].date,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                          trailing: Text(
+                            "₹${home.dataFound[index].amount}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  color: home.dataFound[index].type == 'Outcome'
+                                      ? Colors.red
+                                      : Colors.green,
+                                ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 )
               ],
             ),

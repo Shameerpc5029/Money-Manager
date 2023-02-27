@@ -21,6 +21,8 @@ Future<dynamic> bottomSheet(BuildContext context) {
         ),
         child: Consumer<HomeController>(
           builder: (context, value, child) {
+            final hour = value.dateTime.hour.toString().padLeft(2, '0');
+            final minute = value.dateTime.minute.toString().padLeft(2, '0');
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -51,9 +53,14 @@ Future<dynamic> bottomSheet(BuildContext context) {
                 KSizedBox().height10,
                 Row(
                   children: [
-                    const CircleAvatar(
-                      radius: 28,
-                      child: Text('M'),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const CircleAvatar(
+                        radius: 28,
+                        child: Icon(
+                          Icons.camera_alt_rounded,
+                        ),
+                      ),
                     ),
                     KSizedBox().width10,
                     Expanded(
@@ -74,18 +81,40 @@ Future<dynamic> bottomSheet(BuildContext context) {
                   textEditingController: value.amountController,
                 ),
                 KSizedBox().height10,
-                CustomTextFormField(
-                  labelText: 'Date And time',
-                  suffix: InkWell(
-                    onTap: () {},
-                    child: const Icon(
-                      Icons.calendar_month_outlined,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Text(
+                          "${value.dateTime.day}/${value.dateTime.month}/${value.dateTime.year} $hour:$minute"),
                     ),
-                  ),
-                  prefixIcon: Icons.date_range,
-                  textInputType: TextInputType.datetime,
-                  textEditingController: value.dateController,
+                    TextButton.icon(
+                      onPressed: () async {
+                        value.pickDateTime(context);
+                      },
+                      icon: Icon(Icons.date_range_outlined),
+                      label: Text(
+                        'Date & Time',
+                      ),
+                    ),
+                  ],
                 ),
+
+                // CustomTextFormField(
+                //   labelText: 'Date And time',
+                //   suffix: InkWell(
+                //     onTap: () {
+
+                //     },
+                //     child: const Icon(
+                //       Icons.calendar_month_outlined,
+                //     ),
+                //   ),
+                //   prefixIcon: Icons.date_range,
+                //   textInputType: TextInputType.datetime,
+                //   textEditingController: value.dateController,
+                // ),
                 KSizedBox().height10,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -93,17 +122,33 @@ Future<dynamic> bottomSheet(BuildContext context) {
                     CustomCardSmall(
                       text: "Income",
                       iconData: Icons.arrow_circle_down_outlined,
-                      onTap: () {},
+                      onTap: () {
+                        value.incomeButtonPress();
+                      },
+                      backgroundColor: value.isClicked1 == true
+                          ? AppColors().themeColor
+                          : Colors.white,
+                      foregroundColor: value.isClicked1 == true
+                          ? Colors.white
+                          : Colors.black,
                     ),
                     KSizedBox().width10,
                     CustomCardSmall(
                       text: "Outcome",
                       iconData: Icons.arrow_circle_up_outlined,
-                      onTap: () {},
+                      onTap: () {
+                        value.outComeButtonPress();
+                      },
+                      backgroundColor: value.isClicked2 == true
+                          ? AppColors().themeColor
+                          : Colors.white,
+                      foregroundColor: value.isClicked2 == true
+                          ? Colors.white
+                          : Colors.black,
                     ),
                   ],
                 ),
-                KSizedBox().height10,
+                KSizedBox().height30,
               ],
             );
           },
