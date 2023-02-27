@@ -8,19 +8,21 @@ class CustomTextFormField extends StatelessWidget {
     required this.prefixIcon,
     required this.textInputType,
     required this.textEditingController,
+    this.validator,
   });
   final TextInputType textInputType;
   final IconData prefixIcon;
   final String labelText;
   final Widget? suffix;
   final TextEditingController textEditingController;
+  final String? Function(String?)? validator;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: textEditingController,
+      validator: validator,
       keyboardType: textInputType,
       decoration: InputDecoration(
-        // suffixIcon: Icon(suffixIcon),
         prefixIcon: Icon(prefixIcon),
         suffix: suffix,
         contentPadding: const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),

@@ -12,6 +12,7 @@ class HomeController extends ChangeNotifier {
 
   final TextEditingController noteController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
+  final GlobalKey<FormState> formGlobalKey = GlobalKey<FormState>();
 
   bool isClicked1 = false;
   bool isClicked2 = false;
@@ -42,21 +43,26 @@ class HomeController extends ChangeNotifier {
   }
 
   Future<void> saveData(context) async {
-    final manager = HiveModel(
-      note: noteController.text.trimLeft(),
-      amount: amountController.text,
-      date:
-          "${dateTime.day}/${dateTime.month}/${dateTime.year} ${(dateTime.hour).toString().padLeft(2, "0")}:${(dateTime.minute).toString().padLeft(2, "0")}",
-      photo: '',
-      type: type,
-      id: DateTime.now().microsecondsSinceEpoch.toString(),
-    );
-    db.addData(manager).then((value) {
-      Navigator.pop(context);
-      controllerClear();
-      log("data added");
-      getAllData();
-    });
+    if (formGlobalKey.currentState!.validate() && type != '') {
+      formGlobalKey.currentState!.save();
+      final manager = HiveModel(
+        note: noteController.text.trimLeft(),
+        amount: amountController.text,
+        date:
+            "${dateTime.day}/${dateTime.month}/${dateTime.year} ${(dateTime.hour).toString().padLeft(2, "0")}:${(dateTime.minute).toString().padLeft(2, "0")}",
+        photo: '',
+        type: type,
+        id: DateTime.now().microsecondsSinceEpoch.toString(),
+      );
+
+      db.addData(manager).then((value) {
+        Navigator.pop(context);
+        controllerClear();
+        log("data added");
+        getAllData();
+      });
+    }
+
     notifyListeners();
   }
 
@@ -65,6 +71,7 @@ class HomeController extends ChangeNotifier {
     amountController.clear();
     isClicked1 = false;
     isClicked2 = false;
+    type = '';
   }
 
   void incomeButtonPress() {
@@ -116,5 +123,24 @@ class HomeController extends ChangeNotifier {
     );
     this.dateTime = dateTime;
     notifyListeners();
+  }
+
+  String? noteValidator(String? value) {
+    if (value!.isEmpty) {
+      return "Please enter your full name";
+    }
+    if (RegExp(r"^[\p{L} ,.'-]*$").hasMatch(value)) {
+      return 'Enter Valid name';
+    } else {
+      return null;
+    }
+  }
+
+  String? amountValidation(String? value) {
+    if (value!.isEmpty) {
+      return "Please enter your Amount";
+    } else {
+      return null;
+    }
   }
 }

@@ -8,6 +8,7 @@ class DbFunctions {
     final managerDb = await Hive.openBox<HiveModel>('manager_db');
     await managerDb.put(value.id, value);
     managerList.add(value);
+
     getAllDatas();
   }
 
